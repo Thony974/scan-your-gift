@@ -14,7 +14,11 @@ function formatToken(raw: string): string {
   return raw.replace(/(.{4})(?=.)/g, "$1-");
 }
 
-export function VoucherCard({ merchantName, rewardName, token }: VoucherCardProps) {
+export function VoucherCard({
+  merchantName,
+  rewardName,
+  token,
+}: VoucherCardProps) {
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [isPending, startTransition] = useTransition();
   const displayToken = formatToken(token);
@@ -34,16 +38,18 @@ export function VoucherCard({ merchantName, rewardName, token }: VoucherCardProp
       {/* Header */}
       <div className="rounded-t-2xl bg-neutral-900 px-6 py-4 dark:bg-neutral-800">
         <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
-          Gift Voucher
+          Bon cadeau EME
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-white">{rewardName || "—"}</h1>
+        <h1 className="mt-1 text-2xl font-bold text-white">
+          {rewardName || "—"}
+        </h1>
       </div>
 
       {/* Body */}
       <div className="space-y-4 px-6 py-5">
-        <Field label="Merchant" value={merchantName} />
-        <Field label="Reward" value={rewardName} />
-        <Field label="Token" value={displayToken} mono />
+        <Field label="Pour" value={rewardName} />
+        <Field label="Commerçant" value={merchantName} />
+        <Field label="Code" value={displayToken} mono />
       </div>
 
       {/* Divider */}
@@ -56,12 +62,16 @@ export function VoucherCard({ merchantName, rewardName, token }: VoucherCardProp
           disabled={isPending || isValidated}
           className="w-full rounded-xl bg-neutral-900 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
-          {isPending ? "Validating…" : isValidated ? "✓ Validated" : "Validate Voucher"}
+          {isPending
+            ? "Validation…"
+            : isValidated
+              ? "✓ Valide"
+              : "Valider le bon"}
         </button>
 
         {isValidated && (
           <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700 dark:bg-green-950 dark:border-green-800 dark:text-green-300">
-            ✅ Voucher is valid and has been redeemed successfully.
+            ✅ Bon validé !
           </div>
         )}
 
@@ -94,7 +104,9 @@ function Field({
           mono ? "font-mono break-all" : ""
         }`}
       >
-        {value || <span className="text-neutral-400 font-normal italic">—</span>}
+        {value || (
+          <span className="text-neutral-400 font-normal italic">—</span>
+        )}
       </p>
     </div>
   );
