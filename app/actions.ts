@@ -35,18 +35,22 @@ export async function validateVoucher(
     return { success: false, error: "Bon cadeau introuvable." };
   }
 
+  const now = new Date();
+
+  if (voucher.expired_at && new Date(voucher.expired_at) < now) {
+    return { success: false, error: "Bon cadeau expiré." };
+  }
+
   // Reject already-used vouchers before touching the DB
   if (voucher.used) {
     return { success: false, error: "Bon cadeau déjà utilisé." };
   }
 
-  const usedAt = new Date().toISOString();
-
-  // Conditional update: only update rows that are still unused (guards against
-  // race conditions where two requests arrive at the same time).
+  // Conditional update: only update rows that are still unused and not expired
+  // (guards against race conditions where two requests arrive at the same time).
   const { data: updatedRows, error: updateError } = await supabase
     .from("voucher")
-    .update({ used: true, used_at: usedAt })
+    .update({ used: true, used_at: now.toISOString() })
     .eq("token_hash", tokenHash)
     .eq("used", false)
     .select();
