@@ -63,15 +63,15 @@ export function VoucherCard({
           className="w-full rounded-xl bg-neutral-900 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {isPending
-            ? "Validation…"
+            ? "Vérification…"
             : isValidated
               ? "✓ Valide"
-              : "Valider le bon"}
+              : "Vérifier le bon"}
         </button>
 
         {isValidated && (
           <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700 dark:bg-green-950 dark:border-green-800 dark:text-green-300">
-            ✅ Bon validé !
+            ✅ Bon valide !
           </div>
         )}
 
